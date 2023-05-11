@@ -3,6 +3,6 @@ __pycache__/*
 
 *tmp*
 *misc*
-data/n128/*
+data/*
 result/*
 figure/*
