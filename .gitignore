@@ -4,4 +4,5 @@ __pycache__/*
 *tmp*
 *misc*
 data/n128/*
-!data/n128/.gitkeep
+result/*
+figure/*
