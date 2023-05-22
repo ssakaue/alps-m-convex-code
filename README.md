@@ -1,6 +1,6 @@
-# Faster M-Convex Function Minimization with Predictions: The Laminar-Convex Case
+# Faster Discrete Convex Function Minimization with Predictions: The M-Convex Case
 
-This repository provides the official implementation of [Faster M-Convex Function Minimization with Predictions: The Laminar-Convex Case]().
+This repository provides the official implementation of [Faster Discrete Convex Function Minimization with Predictions: The M-Convex Case]().
 
 ## Requirements
 - [Python](https://www.python.org) (version 3.9.12 or later)
