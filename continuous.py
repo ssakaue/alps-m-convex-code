@@ -23,8 +23,8 @@ def solve_continuous_quadratic(G):
     leaf_dict = {}
     for i in list(G.nodes)[:0:-1]:
         leaf_dict[i] = [i] if len(G.nodes[i]['children']) == 0 else leaf_dict[G.nodes[i]['children'][0]] + leaf_dict[G.nodes[i]['children'][1]]
-        obj -= (G.nodes[i]['weight'] * (n / (R * len(leaf_dict[i])))**2 ) * gp.quicksum((x[j] - R/n) for j in leaf_dict[i])
-        obj += (G.nodes[i]['weight'] * (n / (R * len(leaf_dict[i])))**3 ) * gp.quicksum((x[j] - R/n) * (x[k] - R/n) for j, k in itertools.product(leaf_dict[i], leaf_dict[i]))
+        obj -= (G.nodes[i]['param']['w'] * (n / (R * len(leaf_dict[i])))**2 ) * gp.quicksum((x[j] - R/n) for j in leaf_dict[i])
+        obj += (G.nodes[i]['param']['w'] * (n / (R * len(leaf_dict[i])))**3 ) * gp.quicksum((x[j] - R/n) * (x[k] - R/n) for j, k in itertools.product(leaf_dict[i], leaf_dict[i]))
     leaf_dict[0] = leaf_dict[G.nodes[0]['children'][0]] + leaf_dict[G.nodes[0]['children'][1]]
 
     model.setObjective(obj, GRB.MINIMIZE)

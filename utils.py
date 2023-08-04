@@ -58,6 +58,26 @@ def projection(y, G):
     return np.array([xdict[i] for i in leaves])
 
 
+def objective(node, x):
+    if not node['l'] <= x <= node['u']:
+        return np.inf
+    elif node['obj'] == 'staff':
+        w = node['param']['w']
+        return w / x if x != 0 else np.inf
+    elif node['obj'] == 'f':
+        b = node['param']['b']
+        return x**4 / 4 + b*x
+    elif node['obj'] == 'crash':
+        a, b = node['param']['a'], node['param']['b']
+        return 10*b + a/x if x != 0 else np.inf
+    elif node['obj'] == 'fuel':
+        a, b = node['param']['a'], node['param']['b']
+        return a * b**2 / x**3 if x != 0 else np.inf
+    elif node['obj'] == 'zero':
+        return 0
+    else:
+        assert False, 'Unknown objective function type'
+
 def direction(x, G):
     leaves = [i for i in G.nodes() if len(G.nodes[i]['children']) == 0]
 
@@ -71,8 +91,8 @@ def direction(x, G):
     wdict = {}
     for i in list(G.nodes())[:0:-1]:
         p = G.nodes[i]['parent'][0]
-        wdict[(i, p)] = G.nodes[i]['weight']/(xdict[i]-1) - G.nodes[i]['weight']/(xdict[i]) if xdict[i] > G.nodes[i]['l'] else np.inf
-        wdict[(p, i)] = G.nodes[i]['weight']/(xdict[i]+1) - G.nodes[i]['weight']/(xdict[i]) if xdict[i] < G.nodes[i]['u'] else np.inf
+        wdict[(i, p)] = objective(G.nodes[i], xdict[i]-1) - objective(G.nodes[i], xdict[i])
+        wdict[(p, i)] = objective(G.nodes[i], xdict[i]+1) - objective(G.nodes[i], xdict[i])
 
     Lu, Ld, Ls = {}, {}, {}
     Pu, Pd, Ps = {}, {}, {}
