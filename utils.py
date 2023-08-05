@@ -57,8 +57,12 @@ def projection(y, G):
 
     return np.array([xdict[i] for i in leaves])
 
-
 def objective(node, x):
+    """
+    Objective functions for f, crash, and fuel are retrieved from
+    https://github.com/qqqhe/dca/blob/3c80051a1062e1e00691615d9c469fe24f5a2ee0/src/main/java/dca_ijoc/RAPNCTestUtils.java#L48-L87
+    """
+
     if not node['l'] <= x <= node['u']:
         return np.inf
     elif node['obj'] == 'staff':
@@ -142,3 +146,14 @@ def simplex_projection(vecX, scale):
     vecY = vecX - t
     vecY[vecY<0] = 0
     return vecY
+
+def integer_initial_vector(n, R):
+    """
+    Returns an initial vector of length n with integer values that sum to R.
+    """
+
+    x = np.ones(n) * (R // n)
+    indices = np.random.choice(n, R % n, replace=False)
+    x[indices] += 1
+
+    return x
