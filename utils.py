@@ -67,16 +67,16 @@ def objective(node, x):
         return np.inf
     elif node['obj'] == 'staff':
         w = node['param']['w']
-        return w / x if x != 0 else np.inf
+        return w / x if x > 0 else np.inf
     elif node['obj'] == 'f':
         b = node['param']['b']
         return x**4 / 4 + b*x
     elif node['obj'] == 'crash':
         a, b = node['param']['a'], node['param']['b']
-        return 10*b + a/x if x != 0 else np.inf
+        return 10*b + a/x if x > 0 else np.inf
     elif node['obj'] == 'fuel':
         a, b = node['param']['a'], node['param']['b']
-        return a * b**2 / x**3 if x != 0 else np.inf
+        return a * b**2 / x**3 if x > 0 else np.inf
     elif node['obj'] == 'zero':
         return 0
     else:
@@ -97,7 +97,7 @@ def direction(x, G):
         p = G.nodes[i]['parent'][0]
         wdict[(i, p)] = objective(G.nodes[i], xdict[i]-1) - objective(G.nodes[i], xdict[i])
         wdict[(p, i)] = objective(G.nodes[i], xdict[i]+1) - objective(G.nodes[i], xdict[i])
-
+    
     Lu, Ld, Ls = {}, {}, {}
     Pu, Pd, Ps = {}, {}, {}
     for i in list(G.nodes())[::-1]:
@@ -127,7 +127,7 @@ def greedy(pred, G):
     while True:
         itr += 1
         dec, (i, j) = direction(x, G)
-        if dec >= -1e-5:
+        if dec > 0:
             break
         x[i] -= 1
         x[j] += 1
